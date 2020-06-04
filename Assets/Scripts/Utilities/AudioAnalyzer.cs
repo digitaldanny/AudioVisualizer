@@ -1,27 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-/*
- * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
- * SUMMARY: BinSamples
- * This class contains left (L) and right (R) bin samples for
- * a selected audio clip.
- * Upon instantiation, user can define fft size.
- * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-*/
-public class BinSamples
-{
-    public float[] L;
-    public float[] R;
-
-    public BinSamples(int fftSize)
-    {
-        L = new float[fftSize];
-        R = new float[fftSize];
-    }
-}
+﻿using UnityEngine;
+using DataStruct;
+using System;
 
 /*
  * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
@@ -30,7 +9,6 @@ public class BinSamples
  * source.
  * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
 */
-[RequireComponent(typeof(AudioSource))]
 public class AudioAnalyzer : MonoBehaviour
 {
     // *****************************************************
@@ -69,24 +47,27 @@ public class AudioAnalyzer : MonoBehaviour
      * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
     */
 
-    // Configs
-    [Header("Frequency Domain")]
-    [SerializeField] int fftSize = 512;
-    [SerializeField] FFTWindow windowType = FFTWindow.Hanning;
-    [SerializeField] int numFreqBands = 8;
+    // User Configs
 
-    [Header("Buffer")]
-    [SerializeField] bool bufEnable = true;
-    [SerializeField] float bufDecreaseStart = 0.05f;
-    [SerializeField] float bufDecreaseAcceleration = 0.2f;
+    // - Frequency domain
+    [SerializeField] int fftMaxSize = 8096;
+    private int fftSize;
+    private FFTWindow windowType;
+    private int numFreqBands;
+
+    // - Frequency band buffer
+    private bool bufEnable;
+    private float bufDecreaseStart;
+    private float bufDecreaseAcceleration;
 
     // State
-    int samplingFreq;
-    BinSamples bins;
-    float[] freqBand;
+    public BinStereo bins;
+    private int samplingFreq;
+    private float[] freqBand;
 
     // Cache
-    AudioSource audioSource;
+    private AudioSource audioSource;
+    private UserConfigs userConfigs;
 
     // *****************************************************
     //               MONO BEHAVIOUR OVERRIDE
@@ -96,16 +77,17 @@ public class AudioAnalyzer : MonoBehaviour
     void Start()
     {
         // State
-        bins = new BinSamples(this.fftSize);
-        samplingFreq = AudioSettings.outputSampleRate;
+        bins = new BinStereo(this.fftMaxSize);
 
         // Cache
         audioSource = GetComponent<AudioSource>();
+        userConfigs = FindObjectOfType<UserConfigs>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        GetUserConfigs();
         UpdateBins();
         UpdateFreqBands();
     }
@@ -116,6 +98,24 @@ public class AudioAnalyzer : MonoBehaviour
 
     /*
      * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+     * SUMMARY: GetUserConfigs
+     * Update class attributes since user configurations can change
+     * during runtime.
+     * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+    */
+    private void GetUserConfigs()
+    {
+        samplingFreq = userConfigs.samplingRate;
+        fftSize = userConfigs.fftSize;
+        windowType = userConfigs.fftWindowType;
+        numFreqBands = userConfigs.numFreqBands;
+        bufEnable = userConfigs.bufEnable;
+        bufDecreaseStart = userConfigs.bufDecreaseStart;
+        bufDecreaseAcceleration = userConfigs.bufDecreaseAcceleration;
+    }
+
+    /*
+     * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
      * SUMMARY: UpdateBins
      * This function captures bin energy for the left and right
      * channels of the selected audio clip.
@@ -123,9 +123,32 @@ public class AudioAnalyzer : MonoBehaviour
     */
     private void UpdateBins()
     {
+        // Create temporary array to store new samples before copying them
+        // over to the dynamic container.
+        float[] tempLeftBins = new float[this.fftSize];
+        float[] tempRightBins = new float[this.fftSize];
+
         // Get left and right channel bin amplitudes
-        audioSource.GetSpectrumData(this.bins.L, (int)Channel.left, this.windowType);
-        audioSource.GetSpectrumData(this.bins.R, (int)Channel.right, this.windowType);
+        try
+        {
+            audioSource.GetSpectrumData(tempLeftBins, (int)Channel.left, this.windowType);
+            audioSource.GetSpectrumData(tempRightBins, (int)Channel.right, this.windowType);
+        }
+        catch(Exception e)
+        {
+            Debug.Log("ERROR (AudioAnalyzer.UpdateBins) calculating spectrum values: fftSize = " + this.fftSize);
+            return;
+        }
+
+        // Check if bin list needs to be resized and then copy new spectrum data into the container.
+        if (this.bins.size != this.fftSize)
+            this.bins.ResizeFFT(this.fftSize);
+
+        for (int i = 0; i < this.fftSize; i++)
+        {
+            this.bins.L[i] = tempLeftBins[i];
+            this.bins.R[i] = tempRightBins[i];
+        }
     }
 
     /*
@@ -142,15 +165,6 @@ public class AudioAnalyzer : MonoBehaviour
     // *****************************************************
     //                   PUBLIC METHODS
     // *****************************************************
-
-    /*
-     * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-     * SUMMARY: GetBins
-     * These functions return the current left and right channel
-     * bin amplitudes.
-     * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-    */
-    public BinSamples GetBins() { return this.bins; }
 
     /*
      * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
