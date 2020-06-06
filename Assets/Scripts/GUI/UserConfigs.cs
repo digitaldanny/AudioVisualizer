@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEditor;
+using MyBox;
 
 /*
  * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
@@ -12,7 +12,6 @@ using UnityEditor;
 [RequireComponent(typeof(AudioAnalyzer))]
 public class UserConfigs : MonoBehaviour
 {
-
     // *****************************************************
     //                  CLASS ATTRIBUTES
     // *****************************************************
@@ -48,79 +47,75 @@ public class UserConfigs : MonoBehaviour
     */
 
     // User Configs
-    [Header("Audio Clip")]
-    [SerializeField] public AudioClip audioClip;
+    [Foldout("AUDIO CLIP", true)]
+    [SerializeField]
+    public AudioClip audioClip;
 
-    [Header("Frequency Domain")]
-    [SerializeField] public FFTWindow fftWindowType = FFTWindow.Hanning;
+    [Foldout("FREQUENCY DOMAIN", true)]
+    [SerializeField] 
+    public FFTWindow fftWindowType = FFTWindow.Hanning;
 
-    [Header("Frequency Band")]
-    [SerializeField] public int numFreqBands = 8;
-    [HideInInspector] public bool bufEnable = true;
+    [Foldout("FREQUENCY BAND", true)]
+    [SerializeField] public bool bufEnable = true;
+
     [Tooltip("If the new sample value is less than previous sample, start decreasing buffer value at this rate.")]
-    [HideInInspector] public float bufDecreaseStart = 0.05f;
+    [ConditionalField(nameof(bufEnable), false)] 
+    public float bufDecreaseStart = 0.05f;
+
     [Tooltip("If the new sample value is less than previous sample, increase 'Decrease Rate' at this acceleration.")]
-    [HideInInspector] public float bufDecreaseAcceleration = 0.2f;
+    [ConditionalField(nameof(bufEnable), false)] 
+    public float bufDecreaseAcceleration = 0.2f;
+
+    [MinMaxRange(0f, 44100f / 2f)]
+    public RangedFloat[] freqBandRange;
 
     // State
     public int samplingRate;
     public int fftSize;
+    public int numFreqBands;
+    public float freqResolution;
 
     // *****************************************************
     //              MONO BEHAVIOUR OVERRIDE
     // *****************************************************
 
-    private void Start()
+    private void Awake()
     {
-        // Initialize state variables
-        this.samplingRate = AudioSettings.outputSampleRate;
-        this.fftSize = 1024;
+        SetGlobalDefaults();
     }
 
     private void Update()
     {
-        
+        UpdateFreqResolution();
     }
 
     // *****************************************************
     //                  PRIVATE METHODS
     // *****************************************************
+    private void SetGlobalDefaults()
+    {
+        // Initialize state variables
+        this.samplingRate = AudioSettings.outputSampleRate;
+        this.fftSize = 1024;
+        this.numFreqBands = 8;
 
+        // initialize frequency band ranges
+        freqBandRange = new RangedFloat[numFreqBands];
+        freqBandRange[0] = new RangedFloat(0, 100);
+    }
+
+    /*
+     * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+     * SUMMARY: UpdateFreqResolution
+     * This function calculates the frequency resolution 
+     * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+    */
+    private void UpdateFreqResolution()
+    {
+        this.freqResolution = samplingRate / fftSize;
+    }
 
     // *****************************************************
     //                   PUBLIC METHODS
     // *****************************************************
-
-}
-
-/*
- * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
- * SUMMARY: UserConfigsEditor
- * This class implements a custom inspector editor for the
- * UserConfigs class.
- * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-*/
-[CustomEditor(typeof(UserConfigs))]
-public class UserConfigsEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        base.DrawDefaultInspector();
-
-        // Use target script instantiation
-        var userConfigs = target as UserConfigs;
-
-        // Frequency band buffer details
-        userConfigs.bufEnable = GUILayout.Toggle(userConfigs.bufEnable, "Buffer Enable");
-        using (new EditorGUI.DisabledScope(!userConfigs.bufEnable))
-        {
-            userConfigs.bufDecreaseAcceleration = EditorGUILayout.FloatField(
-                "Acceleration", 
-                userConfigs.bufDecreaseAcceleration);
-
-            userConfigs.bufDecreaseStart = EditorGUILayout.FloatField(
-                "Decrease Init", 
-                userConfigs.bufDecreaseStart);
-        }
-    }
 }

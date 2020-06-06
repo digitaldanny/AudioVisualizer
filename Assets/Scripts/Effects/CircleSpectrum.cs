@@ -2,7 +2,7 @@
 using UnityEngine;
 using DataStruct;
 
-public class BasicSpectrum : MonoBehaviour
+public class CircleSpectrum : MonoBehaviour
 {
     // *****************************************************
     //                 CLASS PARAMETERS

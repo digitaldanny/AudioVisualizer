@@ -296,6 +296,54 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 26, y: 0, z: 0}
+--- !u!1 &985727508
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 985727510}
+  - component: {fileID: 985727509}
+  m_Layer: 0
+  m_Name: Basic Band Spectrum
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &985727509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 985727508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a17543f550a5a634fb36971e650d5c50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sampleCubePrefab: {fileID: 4242031858411348939, guid: 6f79b5bbc2c4a724da34e6a72ddf3e89,
+    type: 3}
+  cubeWidthScale: 5
+  maxHeight: 500
+  radius: 100
+--- !u!4 &985727510
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 985727508}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.0829391, y: -0.8253164, z: 0.4337864}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1682682563
 GameObject:
   m_ObjectHideFlags: 0
@@ -343,12 +391,54 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioClip: {fileID: 8300000, guid: 0cd4d0600f3cc9b439f549f6cc4549f9, type: 3}
   fftWindowType: 3
-  numFreqBands: 8
   bufEnable: 0
   bufDecreaseStart: 0.05
   bufDecreaseAcceleration: 0.2
+  freqBandRange:
+  - Min: 5182.4287
+    Max: 17521.547
+  - Min: 0
+    Max: 0
+  - Min: 0
+    Max: 0
+  - Min: 0
+    Max: 0
+  - Min: 0
+    Max: 0
+  - Min: 0
+    Max: 0
+  - Min: 0
+    Max: 0
+  - Min: 0
+    Max: 0
+  - Min: 0
+    Max: 0
+  - Min: 0
+    Max: 0
+  - Min: 0
+    Max: 0
+  - Min: 0
+    Max: 0
+  - Min: 0
+    Max: 0
+  - Min: 0
+    Max: 0
+  - Min: 0
+    Max: 0
+  - Min: 0
+    Max: 0
+  - Min: 0
+    Max: 0
+  - Min: 0
+    Max: 0
+  - Min: 0
+    Max: 0
+  - Min: 0
+    Max: 0
   samplingRate: 0
   fftSize: 8096
+  numFreqBands: 0
+  freqResolution: 0
 --- !u!114 &1682682566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -469,12 +559,12 @@ GameObject:
   - component: {fileID: 1798424118}
   - component: {fileID: 1798424117}
   m_Layer: 0
-  m_Name: Basic Spectrum
+  m_Name: Circle Spectrum
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1798424117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -499,36 +589,6 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1798424116}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.0829391, y: -0.8253164, z: 0.4337864}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1847804900
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1847804901}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1847804901
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1847804900}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.0829391, y: -0.8253164, z: 0.4337864}
   m_LocalScale: {x: 1, y: 1, z: 1}

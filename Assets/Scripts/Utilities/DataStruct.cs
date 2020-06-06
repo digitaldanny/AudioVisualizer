@@ -110,4 +110,34 @@ namespace DataStruct
             return true;
         }
     }
+
+    /*
+     * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+     * SUMMARY: FreqBandMono
+     * This class contains minimum and maximum frequency ranges to
+     * calculate average FFT bin energy for + store into the data
+     * list.
+     * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+    */
+    public class FreqBandMono
+    {
+        public EasyList<float> data;
+        public float minFreq;
+        public float maxFreq;
+
+        public FreqBandMono(int maxSize)
+        {
+            data = new EasyList<float>(maxSize, 0f);
+            minFreq = 0f;
+            maxFreq = 0f;
+        }
+
+        // Sets the frequency range to average bin energy for
+        // and store in the data list.
+        public void SetFreqRange(float min, float max)
+        {
+            minFreq = min;
+            maxFreq = max;
+        }
+    }
 }

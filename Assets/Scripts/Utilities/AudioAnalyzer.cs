@@ -44,6 +44,9 @@ public class AudioAnalyzer : MonoBehaviour
      * @bufDecreaseAcceleration
      *  Percentage that the bufDecreaseStart value will increase
      *  by after every frame.
+     * ------------------------------------------------------------
+     * STATE:
+     * 
      * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
     */
 
@@ -53,7 +56,6 @@ public class AudioAnalyzer : MonoBehaviour
     [SerializeField] int fftMaxSize = 8096;
     private int fftSize;
     private FFTWindow windowType;
-    private int numFreqBands;
 
     // - Frequency band buffer
     private bool bufEnable;
@@ -62,6 +64,8 @@ public class AudioAnalyzer : MonoBehaviour
 
     // State
     public BinStereo bins;
+    public FreqBandMono freqBands;
+    private int numFreqBands;
     private int samplingFreq;
     private float[] freqBand;
 
@@ -76,12 +80,14 @@ public class AudioAnalyzer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // State
-        bins = new BinStereo(this.fftMaxSize);
-
         // Cache
         audioSource = GetComponent<AudioSource>();
         userConfigs = FindObjectOfType<UserConfigs>();
+
+        // State
+        GetUserConfigs(); // Get configs that are set on Awake
+        bins = new BinStereo(this.fftMaxSize);
+        freqBands = new FreqBandMono(this.numFreqBands);    
     }
 
     // Update is called once per frame
@@ -105,10 +111,10 @@ public class AudioAnalyzer : MonoBehaviour
     */
     private void GetUserConfigs()
     {
+        numFreqBands = userConfigs.numFreqBands;
         samplingFreq = userConfigs.samplingRate;
         fftSize = userConfigs.fftSize;
         windowType = userConfigs.fftWindowType;
-        numFreqBands = userConfigs.numFreqBands;
         bufEnable = userConfigs.bufEnable;
         bufDecreaseStart = userConfigs.bufDecreaseStart;
         bufDecreaseAcceleration = userConfigs.bufDecreaseAcceleration;
@@ -154,12 +160,16 @@ public class AudioAnalyzer : MonoBehaviour
     /*
      * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
      * SUMMARY: UpdateFreqBands
-     * Group together a user-specified range of frequencies.
+     * Group together a user-specified range of frequencies and
+     * calculate their average values.
      * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
     */
     private void UpdateFreqBands()
     {
+        for (int i = 0; i < this.numFreqBands; i++)
+        {
 
+        }
     }
 
     // *****************************************************
