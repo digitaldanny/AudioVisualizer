@@ -53,7 +53,7 @@ public class AudioAnalyzer : MonoBehaviour
     // User Configs
 
     // - Frequency domain
-    [SerializeField] int fftMaxSize = 8096;
+    int fftMaxSize;
     private int fftSize;
     private FFTWindow windowType;
 
@@ -64,10 +64,9 @@ public class AudioAnalyzer : MonoBehaviour
 
     // State
     public BinStereo bins;
-    public FreqBandMono freqBands;
+    public FreqBandMono[] freqBands;
     private int numFreqBands;
     private int samplingFreq;
-    private float[] freqBand;
 
     // Cache
     private AudioSource audioSource;
@@ -85,9 +84,14 @@ public class AudioAnalyzer : MonoBehaviour
         userConfigs = FindObjectOfType<UserConfigs>();
 
         // State
+        fftMaxSize = UserConfigs.MAX_FFT_SIZE;
         GetUserConfigs(); // Get configs that are set on Awake
         bins = new BinStereo(this.fftMaxSize);
-        freqBands = new FreqBandMono(this.numFreqBands);    
+
+        // Initialize frequency bands
+        freqBands = new FreqBandMono[this.numFreqBands];
+        for (int i = 0; i < numFreqBands; i++)
+            freqBands[i] = new FreqBandMono();
     }
 
     // Update is called once per frame
@@ -118,6 +122,21 @@ public class AudioAnalyzer : MonoBehaviour
         bufEnable = userConfigs.bufEnable;
         bufDecreaseStart = userConfigs.bufDecreaseStart;
         bufDecreaseAcceleration = userConfigs.bufDecreaseAcceleration;
+        audioSource.clip = userConfigs.audioClip;
+
+        // Get frequency band ranges
+        /*
+        for (int i = 0; i < numFreqBands; i++)
+        {
+            float average = 0f;
+            int startBinIndex = 0; 
+            int endBinIndex = 0; 
+
+            // Determine which bin index relates the this band's frequency range.
+
+            freqBands[i].data = average;
+        }
+        */
     }
 
     /*

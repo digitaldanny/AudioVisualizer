@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using MyBox;
+using DannyAttributes;
+using System;
 
 /*
  * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
@@ -12,6 +14,18 @@ using MyBox;
 [RequireComponent(typeof(AudioAnalyzer))]
 public class UserConfigs : MonoBehaviour
 {
+
+    // *****************************************************
+    //                       CONSTS
+    // *****************************************************
+
+    public const int FFT_DEFAULT_SIZE = 1024;
+    public const int NUM_FREQ_BANDS = 8;
+    public const int MAX_FFT_SIZE = 8192;
+    public const float FREQ_BAND_MIN = 0.0f;
+    public const float FREQ_BAND_MAX = 20000.0f;
+    public const float FREQ_RES_DEFAULT = 100.0f;
+
     // *****************************************************
     //                  CLASS ATTRIBUTES
     // *****************************************************
@@ -48,12 +62,13 @@ public class UserConfigs : MonoBehaviour
 
     // User Configs
     [Foldout("AUDIO CLIP", true)]
-    [SerializeField]
+    [MustBeAssigned]
     public AudioClip audioClip;
 
     [Foldout("FREQUENCY DOMAIN", true)]
-    [SerializeField] 
-    public FFTWindow fftWindowType = FFTWindow.Hanning;
+    [SerializeField] public FFTWindow fftWindowType = FFTWindow.Hanning;
+    [SerializeField] [Delayed] public int fftSize;
+    [SerializeField] [ReadOnly] public float freqResolution;
 
     [Foldout("FREQUENCY BAND", true)]
     [SerializeField] public bool bufEnable = true;
@@ -66,42 +81,26 @@ public class UserConfigs : MonoBehaviour
     [ConditionalField(nameof(bufEnable), false)] 
     public float bufDecreaseAcceleration = 0.2f;
 
-    [MinMaxRange(0f, 44100f / 2f)]
-    public RangedFloat[] freqBandRange;
+    [SerializeField]
+    [Tooltip("Select the frequency range for this band. Slider steps increase by value of frequency resolution (Hz).")]
+    [FreqBandSlider(FREQ_BAND_MIN, FREQ_BAND_MAX)]
+    FreqRange customSlider = new FreqRange(FREQ_RES_DEFAULT); // default value doesn't matter
 
     // State
-    public int samplingRate;
-    public int fftSize;
-    public int numFreqBands;
-    public float freqResolution;
+    [HideInInspector] public int samplingRate;
+    [HideInInspector] public int numFreqBands;
 
     // *****************************************************
     //              MONO BEHAVIOUR OVERRIDE
     // *****************************************************
 
-    private void Awake()
+    private void OnValidate()
     {
-        SetGlobalDefaults();
-    }
-
-    private void Update()
-    {
+        samplingRate = AudioSettings.outputSampleRate;
+        numFreqBands = NUM_FREQ_BANDS;
+        UpdateFFTSize();
         UpdateFreqResolution();
-    }
-
-    // *****************************************************
-    //                  PRIVATE METHODS
-    // *****************************************************
-    private void SetGlobalDefaults()
-    {
-        // Initialize state variables
-        this.samplingRate = AudioSettings.outputSampleRate;
-        this.fftSize = 1024;
-        this.numFreqBands = 8;
-
-        // initialize frequency band ranges
-        freqBandRange = new RangedFloat[numFreqBands];
-        freqBandRange[0] = new RangedFloat(0, 100);
+        customSlider.SetResolution(this.freqResolution);
     }
 
     /*
@@ -112,7 +111,25 @@ public class UserConfigs : MonoBehaviour
     */
     private void UpdateFreqResolution()
     {
-        this.freqResolution = samplingRate / fftSize;
+        if (samplingRate > 0 && fftSize > 0)
+            this.freqResolution = samplingRate / fftSize;
+        else
+            this.freqResolution = FREQ_RES_DEFAULT;
+    }
+
+    /*
+     * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+     * SUMMARY: UpdateFFTSize
+     * Rounds the FFT size to be the nearest power of 2.
+     * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+    */
+    private void UpdateFFTSize()
+    {
+        // Handle division by zero error
+        if (this.fftSize > 0)
+            this.fftSize = (int)Mathf.Pow(2, Mathf.Round(Mathf.Log(this.fftSize) / Mathf.Log(2)));
+        else
+            this.fftSize = FFT_DEFAULT_SIZE;
     }
 
     // *****************************************************

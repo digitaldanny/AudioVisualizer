@@ -121,13 +121,13 @@ namespace DataStruct
     */
     public class FreqBandMono
     {
-        public EasyList<float> data;
+        public float data;
         public float minFreq;
         public float maxFreq;
 
-        public FreqBandMono(int maxSize)
+        public FreqBandMono()
         {
-            data = new EasyList<float>(maxSize, 0f);
+            data = 0f;
             minFreq = 0f;
             maxFreq = 0f;
         }

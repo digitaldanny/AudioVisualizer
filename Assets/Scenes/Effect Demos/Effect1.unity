@@ -312,7 +312,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &985727509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -344,7 +344,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1682682563
+--- !u!1 &1798424116
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -352,10 +352,58 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1682682564}
-  - component: {fileID: 1682682567}
-  - component: {fileID: 1682682566}
-  - component: {fileID: 1682682565}
+  - component: {fileID: 1798424118}
+  - component: {fileID: 1798424117}
+  m_Layer: 0
+  m_Name: Circle Spectrum
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1798424117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798424116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8d66f91cdda5a94fb8540fd5863ab07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sampleCubePrefab: {fileID: 4672328143460345962, guid: 97abf3fc15a89ca479b174a8de585f24,
+    type: 3}
+  cubeWidthScale: 4
+  maxHeight: 700
+  radius: 100
+--- !u!4 &1798424118
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798424116}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.0829391, y: -0.8253164, z: 0.4337864}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1808462354
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1808462358}
+  - component: {fileID: 1808462357}
+  - component: {fileID: 1808462356}
+  - component: {fileID: 1808462355}
   m_Layer: 0
   m_Name: Session
   m_TagString: Untagged
@@ -363,27 +411,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1682682564
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1682682563}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1682682565
+--- !u!114 &1808462355
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1682682563}
+  m_GameObject: {fileID: 1808462354}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f16a404730465824b8c1bf21aa6c664e, type: 3}
@@ -391,78 +425,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioClip: {fileID: 8300000, guid: 0cd4d0600f3cc9b439f549f6cc4549f9, type: 3}
   fftWindowType: 3
+  fftSize: 2048
+  freqResolution: 21
   bufEnable: 0
   bufDecreaseStart: 0.05
   bufDecreaseAcceleration: 0.2
-  freqBandRange:
-  - Min: 5182.4287
-    Max: 17521.547
-  - Min: 0
-    Max: 0
-  - Min: 0
-    Max: 0
-  - Min: 0
-    Max: 0
-  - Min: 0
-    Max: 0
-  - Min: 0
-    Max: 0
-  - Min: 0
-    Max: 0
-  - Min: 0
-    Max: 0
-  - Min: 0
-    Max: 0
-  - Min: 0
-    Max: 0
-  - Min: 0
-    Max: 0
-  - Min: 0
-    Max: 0
-  - Min: 0
-    Max: 0
-  - Min: 0
-    Max: 0
-  - Min: 0
-    Max: 0
-  - Min: 0
-    Max: 0
-  - Min: 0
-    Max: 0
-  - Min: 0
-    Max: 0
-  - Min: 0
-    Max: 0
-  - Min: 0
-    Max: 0
-  samplingRate: 0
-  fftSize: 8096
-  numFreqBands: 0
-  freqResolution: 0
---- !u!114 &1682682566
+  customSlider:
+    minFreqSel: 2156.3342
+    maxFreqSel: 11543.334
+    freqRes: 21
+  samplingRate: 44100
+  numFreqBands: 8
+--- !u!114 &1808462356
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1682682563}
+  m_GameObject: {fileID: 1808462354}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4579cd4ed0411594884af575152df591, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fftMaxSize: 8096
---- !u!82 &1682682567
+--- !u!82 &1808462357
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1682682563}
+  m_GameObject: {fileID: 1808462354}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 0cd4d0600f3cc9b439f549f6cc4549f9, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -548,51 +544,17 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!1 &1798424116
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1798424118}
-  - component: {fileID: 1798424117}
-  m_Layer: 0
-  m_Name: Circle Spectrum
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1798424117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1798424116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8d66f91cdda5a94fb8540fd5863ab07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sampleCubePrefab: {fileID: 4672328143460345962, guid: 97abf3fc15a89ca479b174a8de585f24,
-    type: 3}
-  cubeWidthScale: 4
-  maxHeight: 700
-  radius: 100
---- !u!4 &1798424118
+--- !u!4 &1808462358
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1798424116}
+  m_GameObject: {fileID: 1808462354}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.0829391, y: -0.8253164, z: 0.4337864}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
