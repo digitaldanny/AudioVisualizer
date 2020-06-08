@@ -51,7 +51,6 @@ namespace DataStruct
             if (list.Count < size)
             {
                 while (list.Count < size) { list.Add(this.defaultValue); }
-                Debug.Log(list[0]);
             }
 
             // Truncate the list if requesting a smaller size.
@@ -119,25 +118,19 @@ namespace DataStruct
      * list.
      * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
     */
-    public class FreqBandMono
+    public class FreqBandStereo
     {
-        public float data;
-        public float minFreq;
-        public float maxFreq;
+        public EasyList<float> L;
+        public EasyList<float> R;
+        public int numBands;
 
-        public FreqBandMono()
+        public FreqBandStereo(int num_bands)
         {
-            data = 0f;
-            minFreq = 0f;
-            maxFreq = 0f;
-        }
-
-        // Sets the frequency range to average bin energy for
-        // and store in the data list.
-        public void SetFreqRange(float min, float max)
-        {
-            minFreq = min;
-            maxFreq = max;
+            L = new EasyList<float>(num_bands, 0f);
+            R = new EasyList<float>(num_bands, 0f);
+            L.Resize(num_bands);
+            R.Resize(num_bands);
+            numBands = num_bands;
         }
     }
 }

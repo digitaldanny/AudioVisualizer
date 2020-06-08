@@ -84,7 +84,7 @@ public class UserConfigs : MonoBehaviour
     [SerializeField]
     [Tooltip("Select the frequency range for this band. Slider steps increase by value of frequency resolution (Hz).")]
     [FreqBandSlider(FREQ_BAND_MIN, FREQ_BAND_MAX)]
-    FreqRange customSlider = new FreqRange(FREQ_RES_DEFAULT); // default value doesn't matter
+    public FreqRange[] freqBand = new FreqRange[NUM_FREQ_BANDS];
 
     // State
     [HideInInspector] public int samplingRate;
@@ -96,11 +96,28 @@ public class UserConfigs : MonoBehaviour
 
     private void OnValidate()
     {
+        CheckConstantSettings();
         samplingRate = AudioSettings.outputSampleRate;
-        numFreqBands = NUM_FREQ_BANDS;
+        numFreqBands = freqBand.Length;
         UpdateFFTSize();
         UpdateFreqResolution();
-        customSlider.SetResolution(this.freqResolution);
+        UpdateFreqBandSelector();
+    }
+
+    /*
+     * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+     * SUMMARY: CheckConstantSettings
+     * Reset values that were accidentally changed to the default.
+     * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+    */
+    private void CheckConstantSettings()
+    {
+        // Number of frequency bands can't go past 8 currently.
+        if (freqBand.Length != NUM_FREQ_BANDS)
+        {
+            Debug.LogWarning("WARNING (UserConfigs.CheckConstantSettings): Do not change freqBand size!");
+            Array.Resize(ref freqBand, NUM_FREQ_BANDS);
+        }
     }
 
     /*
@@ -130,6 +147,21 @@ public class UserConfigs : MonoBehaviour
             this.fftSize = (int)Mathf.Pow(2, Mathf.Round(Mathf.Log(this.fftSize) / Mathf.Log(2)));
         else
             this.fftSize = FFT_DEFAULT_SIZE;
+    }
+
+    /*
+     * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+     * SUMMARY: UpdateFreqBandSelector
+     * Update the frequency resolution for each of the frequency
+     * band sliders.
+     * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+    */
+    private void UpdateFreqBandSelector()
+    {
+        for (int i = 0; i < numFreqBands; i++)
+        {
+            freqBand[i].SetResolution(this.freqResolution);
+        }
     }
 
     // *****************************************************

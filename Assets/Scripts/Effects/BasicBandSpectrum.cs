@@ -10,14 +10,12 @@ public class BasicBandSpectrum : MonoBehaviour
 
     // Configs
     [SerializeField] GameObject sampleCubePrefab;
-    [SerializeField] float cubeWidthScale = 5f;
+    [SerializeField] Transform markers;
+    [SerializeField] float cubeWidthScale = 20f;
     [SerializeField] float maxHeight = 1000f;
-    [SerializeField] float radius = 100f;
 
     // State
     GameObject[] sampleCubes;
-    int numFreqBands;
-    int count;
 
     // Cache
     UserConfigs userConfigs;
@@ -30,45 +28,37 @@ public class BasicBandSpectrum : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // State
-        numFreqBands = 8;
-        count = 0;
-
         // Cache
         userConfigs = FindObjectOfType<UserConfigs>();
         audioAnalyzer = FindObjectOfType<AudioAnalyzer>();
+
+        // Instantiate all cubes based on marker locations
+        sampleCubes = new GameObject[userConfigs.fftSize];
+        for (int i = 0; i < userConfigs.numFreqBands; i++)
+        {
+            // spawn cubes as children at location of the markers
+            sampleCubes[i] = Instantiate(
+                sampleCubePrefab,
+                markers.GetChild(i).position,
+                Quaternion.identity,
+                transform
+            ) as GameObject;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (count == 0)
-        {
-            sampleCubes = new GameObject[userConfigs.fftSize];
-            for (int i = 0; i < userConfigs.fftSize; i++)
-            {
-                sampleCubes[i] = Instantiate(
-                    sampleCubePrefab
-                ) as GameObject;
-
-                sampleCubes[i].transform.position = this.transform.position;
-                sampleCubes[i].transform.parent = this.transform; // turn cube into child
-                sampleCubes[i].name = "SampleCube" + i;
-
-                // rotate CubeSpawner around current position for next cube instantiation.
-                this.transform.eulerAngles = new Vector3(0, (float)i * 360 / userConfigs.fftSize, 0);
-                sampleCubes[i].transform.position = Vector3.forward * radius; // radius of the circle
-            }
-            count++;
-        }
-
-        for (int i = 0; i < audioAnalyzer.bins.size; i++)
+        for (int i = 0; i < audioAnalyzer.bands.numBands && i < userConfigs.numFreqBands; i++)
         {
             if (sampleCubes[i] != null)
             {
+                // get the mono value of the specified band
+                float bandValue = ((float)audioAnalyzer.bands.L[i] + (float)audioAnalyzer.bands.R[i]) / 2;
+
                 // update height of the cube
                 sampleCubes[i].transform.localScale = new Vector3(cubeWidthScale,
-                    maxHeight * (float)audioAnalyzer.bins.L[i],
+                    maxHeight * bandValue,
                     cubeWidthScale);
             }
         }

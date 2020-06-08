@@ -51,11 +51,6 @@ namespace DannyAttributes
         public float maxFreqSel; // this is the max slider value
         public float freqRes; // this value can optionally be updated during runtime
 
-        public FreqRange(float freqRes)
-        {
-            SetResolution(freqRes);
-        }
-
         public void SetResolution(float freqRes)
         {
             if (float.IsNaN(minFreqSel))
