@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
-using DataStruct;
+using DannyAttributes;
 
 public class CircleSpectrum : MonoBehaviour
 {

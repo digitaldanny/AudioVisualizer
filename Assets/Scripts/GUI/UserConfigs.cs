@@ -71,20 +71,17 @@ public class UserConfigs : MonoBehaviour
     [SerializeField] [ReadOnly] public float freqResolution;
 
     [Foldout("FREQUENCY BAND", true)]
-    [SerializeField] public bool bufEnable = true;
-
-    [Tooltip("If the new sample value is less than previous sample, start decreasing buffer value at this rate.")]
-    [ConditionalField(nameof(bufEnable), false)] 
-    public float bufDecreaseStart = 0.05f;
-
-    [Tooltip("If the new sample value is less than previous sample, increase 'Decrease Rate' at this acceleration.")]
-    [ConditionalField(nameof(bufEnable), false)] 
-    public float bufDecreaseAcceleration = 0.2f;
-
     [SerializeField]
     [Tooltip("Select the frequency range for this band. Slider steps increase by value of frequency resolution (Hz).")]
     [FreqBandSlider(FREQ_BAND_MIN, FREQ_BAND_MAX)]
     public FreqRange[] freqBand = new FreqRange[NUM_FREQ_BANDS];
+
+    [Foldout("BUFFER BAND", true)]
+    [Tooltip("If the new sample value is less than previous sample, start decreasing buffer value at this rate.")]
+    public float bufDecreaseStart = 0.05f;
+
+    [Tooltip("If the new sample value is less than previous sample, increase 'Decrease Rate' at this acceleration.")]
+    public float bufDecreaseAcceleration = 0.2f;
 
     // State
     [HideInInspector] public int samplingRate;

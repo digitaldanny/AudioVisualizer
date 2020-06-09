@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BasicBandSpectrum : MonoBehaviour
 {
@@ -13,6 +11,7 @@ public class BasicBandSpectrum : MonoBehaviour
     [SerializeField] Transform markers;
     [SerializeField] float cubeWidthScale = 20f;
     [SerializeField] float maxHeight = 1000f;
+    [SerializeField] bool bufferEnable = false;
 
     // State
     GameObject[] sampleCubes;
@@ -53,8 +52,17 @@ public class BasicBandSpectrum : MonoBehaviour
         {
             if (sampleCubes[i] != null)
             {
-                // get the mono value of the specified band
-                float bandValue = ((float)audioAnalyzer.bands.L[i] + (float)audioAnalyzer.bands.R[i]) / 2;
+                float bandValue;
+
+                // Get the mono value of the specified band OR band buffer.
+                if (bufferEnable)
+                {
+                    bandValue = ((float)audioAnalyzer.bandBufs.L[i] + (float)audioAnalyzer.bandBufs.R[i]) / 2;
+                }
+                else
+                {
+                    bandValue = ((float)audioAnalyzer.bands.L[i] + (float)audioAnalyzer.bands.R[i]) / 2;
+                }
 
                 // update height of the cube
                 sampleCubes[i].transform.localScale = new Vector3(cubeWidthScale,

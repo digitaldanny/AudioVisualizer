@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace DataStruct
+namespace DannyAttributes
 {
     /*
      * +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
@@ -14,8 +14,8 @@ namespace DataStruct
     public class EasyList<T>
     {
         private List<T> list;
-        private int maxSize;
-        private T defaultValue;
+        public T defaultValue;
+        public int maxSize;
 
         // constructor
         public EasyList(int maxSize, T defaultValue)
